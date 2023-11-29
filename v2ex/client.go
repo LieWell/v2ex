@@ -19,14 +19,14 @@ var (
 func QuerySiteState() (*ResponseState, error) {
 	var resp ResponseState
 	u := fmt.Sprintf("%s/site/stats.json", apiV1)
-	err := httpclient.Get(u).ToJSON(&resp)
+	err := httpclient.Get(u).SetTransport(proxyTransport()).ToJSON(&resp)
 	return &resp, err
 }
 
 func QueryMemberById(id int) (*ResponseMember, *ResponseError) {
 
 	url := fmt.Sprintf("%s/members/show.json?id=%d", apiV1, id)
-	resp, err := httpclient.Get(url).DoRequest()
+	resp, err := httpclient.Get(url).SetTransport(proxyTransport()).DoRequest()
 	if err != nil {
 		return nil, &ResponseError{
 			err:            err,

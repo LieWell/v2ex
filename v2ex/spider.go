@@ -86,7 +86,7 @@ func StartSpider() {
 				}
 
 				// 发生了不可预知错误,等待1分钟后重试
-				core.Logger.Infof("[spider] query member[%d] error, wait 30 seconds and retry.\nerror: %v", i, err)
+				core.Logger.Infof("[spider] query member[%d] error, wait 30 seconds and retry.\nerror: %v", i, re)
 				time.Sleep(thirtySecond)
 				i--
 				continue
