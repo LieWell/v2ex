@@ -19,3 +19,13 @@
 
 # Go workspace file
 go.work
+
+# Mac OS X System Files
+.DS_Store
+Thumbs.db
+
+# IDEA
+.idea/*
+*/build/*
+*.iml
+/out/*
