@@ -46,11 +46,11 @@ func StartSpider() {
 
 		// 从中断编号的下一个开始查询
 		nextNumber := latestMemberNumber + 1
-		core.Logger.Infof("[spider] will start from member[%d]\n", nextNumber)
+		core.Logger.Infof("[spider] from db find last member[%d]", latestMemberNumber)
 
 		// 每次仅处理新增的数据
 		for i := nextNumber; i < siteState.MemberMax; i++ {
-			core.Logger.Infof("[spider] start to process member[%d]\n", i)
+			core.Logger.Infof("[spider] start to process member[%d]", i)
 
 			// 调用接口查询详情,可能遇到的错误:
 			// 1. 真的出错了
