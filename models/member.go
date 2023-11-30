@@ -26,6 +26,13 @@ type Member struct {
 	CreateTime time.Time `gorm:"column:create_time" json:"createTime"`
 }
 
+// KV 用来接收特定返回值
+// 编写 SQL 时定义与之对应的别名
+type KV struct {
+	Date  string `gorm:"column:date"`  // 使用 date 字段接收时间
+	Count int    `gorm:"column:count"` // 使用 count 字段接收统计的数据
+}
+
 func (m *Member) TableName() string {
 	return memberTableName
 }
@@ -68,4 +75,10 @@ func FindMembers(equalCondition *Member, offset, limit int, createTimeRange []ti
 	}
 	err := tx.Find(&records, equalCondition).Limit(-1).Offset(-1).Count(&count).Error
 	return count, records, err
+}
+
+func CountMemberByYear() ([]KV, error) {
+	var results []KV
+	err := core.MYSQL.Model(EmptyMember).Select("date_format(create_time,'%Y') as date, count(id) as count").Group("date").Order("date ASC").Scan(&results).Error
+	return results, err
 }

@@ -37,7 +37,8 @@ func QueryMemberById(id int) (*ResponseMember, *ResponseError) {
 	}
 
 	// 达到配额
-	if resp.Header.Get(rateLimitRemain) == "0" {
+	// 有时候 Header 中并不会返回配额消息,但是状态吗都是 403
+	if resp.Header.Get(rateLimitRemain) == "0" || resp.StatusCode == http.StatusForbidden {
 		reset, _ := strconv.Atoi(resp.Header.Get(rateLimitReset))
 		return nil, &ResponseError{
 			err:            errors.New("rate limit remaining 0"),
@@ -47,22 +48,22 @@ func QueryMemberById(id int) (*ResponseMember, *ResponseError) {
 		}
 	}
 
-	// 请求异常
-	// 这里认为大于 400 的状态码都算作异常
-	if resp.StatusCode >= http.StatusBadRequest {
+	// 读取响应
+	all, err := io.ReadAll(resp.Body)
+	if err != nil {
 		return nil, &ResponseError{
-			err:            errors.New(http.StatusText(resp.StatusCode)),
+			err:            err,
 			statusCode:     resp.StatusCode,
 			rateLimit:      false,
 			rateLimitReset: 0,
 		}
 	}
 
-	// 读取响应
-	all, err := io.ReadAll(resp.Body)
-	if err != nil {
+	// 请求异常
+	// 这里认为大于 400 的状态码都算作异常
+	if resp.StatusCode >= http.StatusBadRequest {
 		return nil, &ResponseError{
-			err:            err,
+			err:            errors.New(string(all)), // 将返回的整个结果作为错误消息传播
 			statusCode:     resp.StatusCode,
 			rateLimit:      false,
 			rateLimitReset: 0,

@@ -1,4 +1,4 @@
-package apis
+package web
 
 import (
 	"github.com/gin-gonic/gin"
@@ -6,6 +6,14 @@ import (
 	"liewell.fun/v2ex/models"
 	"net/http"
 )
+
+func ListAPIs(ctx *gin.Context) {
+	apiList := []string{
+		"/api",
+		"/api/members/:pageNo/:pageSize",
+	}
+	ctx.JSON(http.StatusOK, core.NewWithSuccess(apiList))
+}
 
 func ListMembers(context *gin.Context) {
 

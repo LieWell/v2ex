@@ -11,6 +11,7 @@ func prepareMysql() {
 	c := flag.String("c", "../config.yaml", "")
 	flag.Parse()
 	core.LoadYamlConfig(*c)
+	core.InitZap()
 	core.InitMysql()
 }
 
@@ -22,4 +23,14 @@ func TestFindLastMember(t *testing.T) {
 		return
 	}
 	fmt.Printf("%+v", member)
+}
+
+func TestCountMemberByYear(t *testing.T) {
+	prepareMysql()
+	kvList, err := CountMemberByYear()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	fmt.Printf("%+v", kvList)
 }

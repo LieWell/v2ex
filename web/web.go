@@ -4,8 +4,6 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"liewell.fun/v2ex/core"
-	"liewell.fun/v2ex/web/apis"
-	"liewell.fun/v2ex/web/echarts"
 	"net/http"
 )
 
@@ -63,11 +61,17 @@ func registryHandler(engine *gin.Engine) {
 		context.HTML(http.StatusOK, "index.html", gin.H{})
 	})
 
-	// TODO 测试页面
-	engine.GET("/line", echarts.RenderLine)
+	// 会员数量
+	engine.GET("/members/count", RenderMembersCount)
+
+	// 会员趋势
+	engine.GET("/members/trend", RenderMembersTrend)
+
+	// 会员地域分布
+	engine.GET("/members/location", RenderMembersLocation)
 
 	// API 分组
 	api := engine.Group("/api")
-	api.GET("/", apis.ListAPIs)
-	api.GET("/members/:pageNo/:pageSize", apis.ListMembers)
+	api.GET("/", ListAPIs)
+	api.GET("/members/:pageNo/:pageSize", ListMembers)
 }

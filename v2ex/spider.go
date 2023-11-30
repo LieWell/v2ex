@@ -59,6 +59,17 @@ func StartSpider() {
 			rm, re := QueryMemberById(i)
 			if re != nil {
 
+				// 处理情况 3
+				// 如果已达到限速,则等待到最近的 ResetAt 时间
+				if re.RateLimit() {
+					// 理论上需要等到 re.RateLimitReset() 时间点
+					// 但是代理切换或者其他原因可能导致提前开始,因此每 10 分钟检查一次
+					core.Logger.Infof("[spider] member[%d] rate limit occured, retry after 10 mintus.", i)
+					time.Sleep(tenMinute)
+					i--
+					continue
+				}
+
 				// 处理情况 2
 				// 数据不存在时,插入一条假数据代替,保证数据的连续性
 				if re.StatusCode() == http.StatusNotFound {
@@ -71,17 +82,6 @@ func StartSpider() {
 					}
 					// 继续处理下一条数据
 					core.Logger.Infof("[spider] insert fake member[%d] success", i)
-					continue
-				}
-
-				// 处理情况 3
-				// 如果已达到限速,则等待到最近的 ResetAt 时间
-				if re.RateLimit() {
-					// 理论上需要等到 re.RateLimitReset() 时间点
-					// 但是代理切换或者其他原因可能导致提前开始,因此每 10 分钟检查一次
-					core.Logger.Infof("[spider] member[%d] rate limit occured, retry after 10 mintus.", i)
-					time.Sleep(tenMinute)
-					i--
 					continue
 				}
 
@@ -99,7 +99,7 @@ func StartSpider() {
 				i--
 				continue
 			}
-			core.Logger.Infof("[spider] insert real member[%d-%s] success, go next.", i, member.Name)
+			core.Logger.Infof("[spider] insert real member[%d-%s] success.", i, member.Name)
 		}
 	}
 }

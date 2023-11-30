@@ -5,6 +5,7 @@ go 1.21.0
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-echarts/go-echarts/v2 v2.3.2
+	github.com/robfig/cron v1.2.0
 	go.uber.org/zap v1.26.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gopkg.in/yaml.v3 v3.0.1
