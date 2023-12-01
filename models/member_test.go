@@ -27,10 +27,24 @@ func TestFindLastMember(t *testing.T) {
 
 func TestCountMemberByYear(t *testing.T) {
 	prepareMysql()
-	kvList, err := CountMemberByYear()
+	kvList, err := CountMember()
 	if err != nil {
 		t.Error(err)
 		return
 	}
 	fmt.Printf("%+v", kvList)
+}
+
+func TestFind404Members(t *testing.T) {
+	prepareMysql()
+	records, err := Find404Members(1, 99999)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	fmt.Printf("%+v", len(records))
+}
+
+func TestUpdateMember(t *testing.T) {
+
 }

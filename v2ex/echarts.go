@@ -24,18 +24,23 @@ func StartDrawCharts() {
 }
 
 func DrawMemberCountBar() {
-	kvList, err := models.CountMemberByYear()
+	kvList, err := models.CountMember()
 	if err != nil {
 		core.Logger.Error(err)
 	}
 	var xAxis []string
 	var series []opts.BarData
 	for _, kv := range kvList {
+		// 排除非法数据
+		if kv.Date == "1970-01" {
+			continue
+		}
 		xAxis = append(xAxis, kv.Date)
 		series = append(series, opts.BarData{
 			Value: kv.Count,
-			Label: &opts.Label{
-				Show: true,
+			Tooltip: &opts.Tooltip{
+				Show:      true,
+				TriggerOn: "mousemove",
 			},
 		})
 	}
@@ -43,6 +48,7 @@ func DrawMemberCountBar() {
 	bar.SetGlobalOptions(
 		charts.WithInitializationOpts(opts.Initialization{
 			Theme: types.ThemeMacarons,
+			Width: "1200px",
 		}),
 		charts.WithTitleOpts(opts.Title{
 			Title: "注册会员数统计(年)",

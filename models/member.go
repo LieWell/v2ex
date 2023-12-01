@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"gorm.io/gorm"
 	"liewell.fun/v2ex/core"
 	"time"
@@ -51,6 +52,13 @@ func SaveMember(m *Member) (int, error) {
 	return m.Id, err
 }
 
+func UpdateMember(m *Member) error {
+	if m.Id == 0 {
+		return fmt.Errorf("invalid param id: 0")
+	}
+	return core.MYSQL.Save(m).Error
+}
+
 // FindLastMember 获取最新的会员数据
 func FindLastMember() (*Member, error) {
 	var m Member
@@ -67,7 +75,7 @@ func FindLastMember() (*Member, error) {
 }
 
 func FindMembers(equalCondition *Member, offset, limit int, createTimeRange []time.Time) (int64, []*Member, error) {
-	records := make([]*Member, 0)
+	var records []*Member
 	var count int64
 	tx := core.MYSQL.Offset(offset).Limit(limit).Order("id desc")
 	if len(createTimeRange) == 2 {
@@ -77,8 +85,15 @@ func FindMembers(equalCondition *Member, offset, limit int, createTimeRange []ti
 	return count, records, err
 }
 
-func CountMemberByYear() ([]KV, error) {
+func CountMember() ([]KV, error) {
 	var results []KV
-	err := core.MYSQL.Model(EmptyMember).Select("date_format(create_time,'%Y') as date, count(id) as count").Group("date").Order("date ASC").Scan(&results).Error
+	//err := core.MYSQL.Model(EmptyMember).Select("date_format(create_time,'%Y') as date, count(id) as count").Group("date").Order("date ASC").Scan(&results).Error
+	err := core.MYSQL.Model(EmptyMember).Select("date_format(create_time,'%Y-%m') as date, count(id) as count").Group("date").Order("date ASC").Scan(&results).Error
 	return results, err
+}
+
+func Find404Members(start, end int) ([]*Member, error) {
+	var records []*Member
+	err := core.MYSQL.Model(EmptyMember).Where("`number` BETWEEN ? AND ?", start, end).Where("`status` = ?", "not found").Find(&records).Error
+	return records, err
 }

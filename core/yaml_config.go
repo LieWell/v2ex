@@ -19,6 +19,7 @@ type YamlHttp struct {
 	ListenAddrTLS string `yaml:"listenAddrTLS"` // TLS 配置,留空表示不起用
 	CertFile      string `yaml:"certFile"`      // TLS 证书
 	KeyFile       string `yaml:"keyFile"`       // TLS 密钥
+	Proxy         string `yaml:"proxy"`         // 代理服务器地址
 }
 
 type YamlMysql struct {
