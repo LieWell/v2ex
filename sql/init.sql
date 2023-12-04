@@ -7,18 +7,21 @@ ALTER TABLE v2ex.member
 SHOW VARIABLES WHERE Variable_name LIKE 'character%' OR Variable_name LIKE 'collation%';
 
 /** 创建表 **/
-create table member
+CREATE TABLE `member`
 (
-    id          int auto_increment primary key,
-    number      int           null,
-    name        varchar(255)  null,
-    website     varchar(2048) null,
-    twitter     varchar(2048) null,
-    github      varchar(2048) null,
-    location    varchar(2048) null,
-    tag_line    varchar(2048) null,
-    avatar      varchar(2048) null,
-    status      varchar(255)  null,
-    create_time datetime      null,
-    constraint unique_number unique (number)
-);
+    `id`          int NOT NULL AUTO_INCREMENT,
+    `number`      int           DEFAULT NULL,
+    `name`        varchar(255)  DEFAULT NULL,
+    `website`     varchar(2048) DEFAULT NULL,
+    `twitter`     varchar(2048) DEFAULT NULL,
+    `github`      varchar(2048) DEFAULT NULL,
+    `location`    varchar(2048) DEFAULT NULL,
+    `tag_line`    varchar(2048) DEFAULT NULL,
+    `avatar`      varchar(2048) DEFAULT NULL,
+    `status`      varchar(255)  DEFAULT NULL,
+    `create_time` datetime      DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `unique_number` (`number`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;

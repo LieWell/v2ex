@@ -45,6 +45,12 @@ func TestFind404Members(t *testing.T) {
 	fmt.Printf("%+v", len(records))
 }
 
-func TestUpdateMember(t *testing.T) {
-
+func TestCountStatus(t *testing.T) {
+	prepareMysql()
+	records, err := CountMemberStatus()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	fmt.Printf("%+v", records)
 }

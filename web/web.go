@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"liewell.fun/v2ex/core"
-	"net/http"
 )
 
 func StartAndWait(ctx context.Context) {
@@ -50,16 +49,14 @@ func StartAndWait(ctx context.Context) {
 
 func registryHandler(engine *gin.Engine) {
 
-	// 静态目录
+	// 设定静态资源目录
 	engine.Static("/static", "static")
 
-	// html 模板
+	// 加载模板
 	engine.LoadHTMLGlob("static/template/*")
 
-	// 根目录定位到首页
-	engine.GET("/", func(context *gin.Context) {
-		context.HTML(http.StatusOK, "index.html", gin.H{})
-	})
+	// 渲染首页
+	engine.GET("/", RenderIndex)
 
 	// 会员数量
 	engine.GET("/members/count", RenderMembersCount)
