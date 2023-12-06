@@ -8,6 +8,8 @@ const (
 	ServerVersion        = "0.0.10"
 	DefaultTimeFormat    = "2006-01-02 15:04:05"
 	DefaultLogTimeFormat = "2006-01-02 15:04:05.000"
+	HttpProtocolPrefix   = "http://"
+	HttpsProtocolPrefix  = "https://"
 )
 
 var (

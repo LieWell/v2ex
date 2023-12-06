@@ -13,7 +13,7 @@ var (
 	oneDay       = time.Hour * 24
 )
 
-func StartSpider() {
+func StartMemberSpider() {
 	core.Logger.Info("[spider] start to crawl v2ex member, first query total member count.")
 	for {
 
@@ -29,9 +29,9 @@ func StartSpider() {
 
 		// 查询上次中断的编号
 		// 理论上查询数据库不应该出错,象征性的等待下
-		latestMember, err := models.FindLastMember()
-		if err != nil {
-			core.Logger.Infof("[spider] query db latest member error, wait 30 seconds and retry. \nerror: %v", err)
+		latestMember, dbError := models.FindLastMember()
+		if dbError != nil {
+			core.Logger.Infof("[spider] query db latest member error, wait 30 seconds and retry. \nerror: %v", dbError)
 			time.Sleep(thirtySecond)
 			continue
 		}
@@ -49,14 +49,14 @@ func StartSpider() {
 		core.Logger.Infof("[spider] from db find last member[%d]", latestMemberNumber)
 
 		// 每次仅处理新增的数据
-		for i := nextNumber; i < siteState.MemberMax; i++ {
+		for i := nextNumber; i <= siteState.MemberMax; i++ {
 			core.Logger.Infof("[spider] start to process member[%d]", i)
 
 			// 调用接口查询详情,可能遇到的错误:
 			// 1. 真的出错了
 			// 2. 数据不存在
 			// 3. 触发限速
-			rm, re := QueryMemberById(i)
+			rm, re := QueryMember(i)
 			if re != nil {
 
 				// 处理情况 3
@@ -104,7 +104,7 @@ func StartSpider() {
 	}
 }
 
-func insertMember(rm *ResponseMember, fakeNumber int) (*models.Member, error) {
+func insertMember(rm *Member, fakeNumber int) (*models.Member, error) {
 	var member *models.Member
 	if fakeNumber != 0 {
 		member = models.NewFakeMember(fakeNumber)
@@ -113,4 +113,8 @@ func insertMember(rm *ResponseMember, fakeNumber int) (*models.Member, error) {
 	}
 	_, err := models.SaveMember(member)
 	return member, err
+}
+
+func StartTopicSpider() {
+
 }

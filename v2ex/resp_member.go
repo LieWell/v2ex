@@ -5,41 +5,7 @@ import (
 	"time"
 )
 
-var (
-	rateLimitQuota  = "x-rate-limit-limit"     // 请求速率配额,每IP每小时600
-	rateLimitRemain = "x-rate-limit-remaining" // 配额剩余量
-	rateLimitReset  = "x-rate-limit-reset"     // 重置时间戳,单位秒
-)
-
-type ResponseError struct {
-	err            error
-	statusCode     int
-	rateLimit      bool
-	rateLimitReset int
-}
-
-type ResponseState struct {
-	TopicMax  int `json:"topic_max"`
-	MemberMax int `json:"member_max"`
-}
-
-func (re *ResponseError) Error() string {
-	return re.err.Error()
-}
-
-func (re *ResponseError) StatusCode() int {
-	return re.statusCode
-}
-
-func (re *ResponseError) RateLimit() bool {
-	return re.rateLimit
-}
-
-func (re *ResponseError) RateLimitReset() int {
-	return re.rateLimitReset
-}
-
-type ResponseMember struct {
+type Member struct {
 	Id           int    `json:"id"`
 	Username     string `json:"username"`
 	Url          string `json:"url"`
@@ -59,7 +25,7 @@ type ResponseMember struct {
 	Status       string `json:"status"`
 }
 
-func (rm *ResponseMember) toModel() *models.Member {
+func (rm *Member) toModel() *models.Member {
 	return &models.Member{
 		Number:     rm.Id,
 		Name:       rm.Username,

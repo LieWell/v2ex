@@ -12,6 +12,7 @@ type YamlConfig struct {
 	Http  YamlHttp  `yaml:"http"`
 	Mysql YamlMysql `yaml:"mysql"`
 	Zap   YamlZap   `yaml:"zap"`
+	V2ex  YamlV2ex  `yaml:"v2ex"`
 }
 
 type YamlHttp struct {
@@ -19,7 +20,7 @@ type YamlHttp struct {
 	ListenAddrTLS string `yaml:"listenAddrTLS"` // TLS 配置,留空表示不起用
 	CertFile      string `yaml:"certFile"`      // TLS 证书
 	KeyFile       string `yaml:"keyFile"`       // TLS 密钥
-	Proxy         string `yaml:"proxy"`         // 代理服务器地址
+	Proxy         string `yaml:"proxy"`         // 代理地址
 }
 
 type YamlMysql struct {
@@ -37,6 +38,10 @@ type YamlZap struct {
 	File    string `yaml:"file"`    // 日志文件
 	MaxSize int    `yaml:"maxSize"` // 日志文件大小,单位 Mi
 	MaxAge  int    `yaml:"maxAge"`  // 日志保存时长,单位 天
+}
+
+type YamlV2ex struct {
+	Token string `yaml:"token"`
 }
 
 func LoadYamlConfig(filepath string) {
