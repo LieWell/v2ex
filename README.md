@@ -33,8 +33,8 @@
 # 进入项目根目录
 # 打包镜像
 docker build -t v2ex:nightly .
-# 通过 docker-compose 启动服务
-docker-compose up -d
+# 启动服务
+docker compose up -d
 ```
 
 ## 功能清单
