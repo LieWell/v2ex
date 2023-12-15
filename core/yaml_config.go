@@ -41,7 +41,8 @@ type YamlZap struct {
 }
 
 type YamlV2ex struct {
-	Token string `yaml:"token"`
+	Token       string `yaml:"token"`
+	StartSpider bool   `yaml:"startSpider"`
 }
 
 func LoadYamlConfig(filepath string) {

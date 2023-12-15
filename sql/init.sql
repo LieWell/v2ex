@@ -1,12 +1,3 @@
-/** 支持 emoji 表情 **/
-SELECT version();
-SET NAMES utf8mb4;
-ALTER DATABASE v2ex CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE v2ex.member
-    CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-SHOW VARIABLES WHERE Variable_name LIKE 'character%' OR Variable_name LIKE 'collation%';
-
-/** 创建表 **/
 CREATE TABLE `member`
 (
     `id`          int NOT NULL AUTO_INCREMENT,
@@ -25,3 +16,17 @@ CREATE TABLE `member`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE `system_config`
+(
+    `id`    int NOT NULL AUTO_INCREMENT,
+    `key`   varchar(255) DEFAULT NULL,
+    `value` longtext     DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `unique_key` (`key`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+INSERT INTO `system_config` (`id`, `key`, `value`)
+VALUES (1, 'last_draw_time', '0001-01-01 00:00:00');

@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"liewell.fun/v2ex/core"
+	"liewell.fun/v2ex/v2ex"
 	"liewell.fun/v2ex/web"
 	"os"
 	"os/signal"
@@ -28,11 +29,15 @@ func main() {
 	core.InitMysql()
 
 	// 启动爬虫任务
-	//go v2ex.StartMemberSpider()
-	//go v2ex.StartTopicSpider()
+	if core.GlobalConfig.V2ex.StartSpider {
+		go v2ex.StartMemberSpider()
+		go v2ex.StartTopicSpider()
+	} else {
+		core.Logger.Infof("v2ex spider switch is off!")
+	}
 
 	// 启动分析任务
-	//go v2ex.StartDrawCharts()
+	go v2ex.StartDrawCharts()
 
 	// 启动 web 服务
 	web.StartAndWait(ctx)

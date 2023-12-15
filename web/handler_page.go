@@ -9,25 +9,34 @@ import (
 
 func RenderIndex(context *gin.Context) {
 
+	// 查询最后更新事件
+	lastDrawTime, err := models.FindSystemConfig(models.SystemConfigKeyLastDrawTime)
+	if err != nil {
+		core.Logger.Warnf("[RenderIndex] query last draw time error: %v", err)
+	}
+
 	// 统计当前有效会员数与无效会员数量
+	var normalCount, notFoundCount int
 	status, err := models.CountMemberStatus()
 	if err != nil {
 		core.Logger.Warnf("[RenderIndex] count member status error: %v", err)
 	}
-	var pageMap = map[string]int{
-		"normalCount":   0,
-		"notFoundCount": 0,
-		"totalCount":    0,
-	}
 	for _, kv := range status {
 		switch kv.KeyOne {
 		case models.MemberStatusFound:
-			pageMap["normalCount"] = kv.Count
+			normalCount = kv.Count
 		case models.MemberStatusNotFound:
-			pageMap["notFoundCount"] = kv.Count
+			notFoundCount = kv.Count
 		}
 	}
-	pageMap["totalCount"] = pageMap["normalCount"] + pageMap["notFoundCount"]
+
+	// 设置到页面
+	var pageMap = map[string]any{
+		"normalCount":   normalCount,
+		"notFoundCount": notFoundCount,
+		"totalCount":    normalCount + notFoundCount,
+		"lastDrawTime":  lastDrawTime,
+	}
 	context.HTML(http.StatusOK, "index.html", pageMap)
 }
 

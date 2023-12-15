@@ -17,15 +17,25 @@
 
 可以通过自动更换代理的方式加快爬取速度。
 
-## 运行
+## 在线预览
 
-### 本地运行 ![golang](https://img.shields.io/badge/golang->=1.21.0-blue)
+[v2ex.liewell.fun](https://v2ex.liewell.fun)
+
+## 本地运行 ![golang](https://img.shields.io/badge/golang->=1.21.0-blue)
 
 1. 开始前需要初始化数据库,表结构文件存在于 `sql/init.sql`
 2. 控制台运行 `go run main.go`
 3. 浏览器访问：`http://localhost:12321`
 
-### 在线预览
+## 线上部署
+
+```shell
+# 进入项目根目录
+# 打包镜像
+docker build -t v2ex:nightly .
+# 通过 docker-compose 启动服务
+docker-compose up -d
+```
 
 ## 功能清单
 
@@ -35,4 +45,3 @@
 | 会员地域分布   | ❌     | /api/members/location          |    |
 | 会员增长趋势   | ❌     |                                |    |
 | 账号字母概率分布 | ❌     |                                |    |
-

@@ -1,0 +1,12 @@
+version: '3'
+services:
+  neutron:
+    image: v2ex:nightly
+    container_name: v2ex
+    volumes:
+      - "./config.yaml:/app/config.yaml"
+      - "/tmp/v2ex.log:/tmp/v2ex.log"
+    environment:
+      - TZ=Asia/Shanghai
+    restart: always
+    network_mode: "host"
