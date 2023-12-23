@@ -11,18 +11,18 @@ import (
 func ReadProxyTransportFromConfig() *http.Transport {
 
 	proxy := core.GlobalConfig.Http.Proxy
-	if !strings.HasPrefix(proxy, core.HttpProtocolPrefix) || !strings.HasPrefix(proxy, core.HttpsProtocolPrefix) {
+	if !strings.HasPrefix(proxy, core.HttpProtocolPrefix) && !strings.HasPrefix(proxy, core.HttpsProtocolPrefix) {
 		core.Logger.Warnf("config Http.Proxy[%s] invalid schema,ignore", proxy)
 		return nil
 	}
 
 	proxyURL, err := url.Parse(core.GlobalConfig.Http.Proxy)
 	if err != nil {
-		core.Logger.Warnf("config Http.Proxy[%s] invalid,ignore", proxy)
+		core.Logger.Warnf("config Http.Proxy[%s] invalid URL,ignore", proxy)
 		return nil
 	}
 
-	core.Logger.Infof("config Http.Proxy[%s] valid", proxy)
+	core.Logger.Infof("config Http.Proxy[%s] check pass ", proxy)
 	return &http.Transport{
 		Proxy:                 http.ProxyURL(proxyURL),
 		MaxIdleConnsPerHost:   10,
