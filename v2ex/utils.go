@@ -5,12 +5,14 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 func ReadProxyTransportFromConfig() *http.Transport {
 
 	proxy := core.GlobalConfig.Http.Proxy
 	if !strings.HasPrefix(proxy, core.HttpProtocolPrefix) || !strings.HasPrefix(proxy, core.HttpsProtocolPrefix) {
+		core.Logger.Warnf("config Http.Proxy[%s] invalid schema,ignore", proxy)
 		return nil
 	}
 
@@ -20,7 +22,10 @@ func ReadProxyTransportFromConfig() *http.Transport {
 		return nil
 	}
 
+	core.Logger.Infof("config Http.Proxy[%s] valid", proxy)
 	return &http.Transport{
-		Proxy: http.ProxyURL(proxyURL),
+		Proxy:                 http.ProxyURL(proxyURL),
+		MaxIdleConnsPerHost:   10,
+		ResponseHeaderTimeout: time.Second * time.Duration(5),
 	}
 }
