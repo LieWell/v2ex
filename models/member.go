@@ -74,6 +74,19 @@ func FindMembers(equalCondition *Member, offset, limit int, createTimeRange []ti
 
 func StatisticsMember() ([]KV, error) {
 	var results []KV
-	err := core.MYSQL.Model(EmptyMember).Select("date_format(create_time,'%Y-%m') as date, count(id) as count").Group("date").Order("date ASC").Scan(&results).Error
+	err := core.MYSQL.Model(EmptyMember).
+		Select("date_format(create_time,'%Y-%m') as date, count(id) as count").
+		Group("date").
+		Order("date ASC").
+		Scan(&results).Error
+	return results, err
+}
+
+func StatisticsMemberTrend() ([]KV, error) {
+	var results []KV
+	var rawSQL = `SELECT d as date, SUM(mc) OVER (ORDER BY d) AS count 
+				  FROM (SELECT DATE_FORMAT(create_time, '%Y-%m') AS d, COUNT(*) AS mc FROM v2ex.member GROUP BY d) sub 
+				  ORDER BY date`
+	err := core.MYSQL.Raw(rawSQL).Scan(&results).Error
 	return results, err
 }

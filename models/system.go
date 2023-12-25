@@ -22,11 +22,11 @@ func (s *SystemConfig) TableName() string {
 }
 
 func UpdateSystemConfig(key, value string) error {
-	return core.MYSQL.Update("`value`=?", value).Where("`key`=?", key).Error
+	return core.MYSQL.Model(EmptySystemConfig).Where("`key` = ?", key).Update("value", value).Error
 }
 
 func FindSystemConfig(key string) (string, error) {
 	var systemConfig SystemConfig
-	err := core.MYSQL.Model(EmptySystemConfig).Where("`key`=?", key).Find(&systemConfig).Error
+	err := core.MYSQL.Model(EmptySystemConfig).Where("`key` = ?", key).Find(&systemConfig).Error
 	return systemConfig.Value, err
 }

@@ -24,3 +24,13 @@ func TestFindLastMember(t *testing.T) {
 	}
 	fmt.Printf("%+v", member)
 }
+
+func TestStatisticsMemberTrend(t *testing.T) {
+	prepareMysql()
+	trend, err := StatisticsMemberTrend()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	fmt.Printf("%+v", len(trend))
+}
