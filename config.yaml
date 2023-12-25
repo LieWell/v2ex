@@ -18,5 +18,5 @@ mysql:
   maxOpenConnections: 100
   maxIdleConnections: 10
 v2ex:
-  startSpider: true
+  startSpider: false
   token:

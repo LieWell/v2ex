@@ -72,20 +72,8 @@ func FindMembers(equalCondition *Member, offset, limit int, createTimeRange []ti
 	return count, records, err
 }
 
-func CountMember() ([]KV, error) {
+func StatisticsMember() ([]KV, error) {
 	var results []KV
 	err := core.MYSQL.Model(EmptyMember).Select("date_format(create_time,'%Y-%m') as date, count(id) as count").Group("date").Order("date ASC").Scan(&results).Error
 	return results, err
-}
-
-func CountMemberStatus() ([]KV, error) {
-	var results []KV
-	err := core.MYSQL.Model(EmptyMember).Select("status as key_one, count(*) as count").Group("status").Scan(&results).Error
-	return results, err
-}
-
-func Find404Members(start, end int) ([]*Member, error) {
-	var records []*Member
-	err := core.MYSQL.Model(EmptyMember).Where("`number` BETWEEN ? AND ?", start, end).Where("`status` = ?", "not found").Find(&records).Error
-	return records, err
 }

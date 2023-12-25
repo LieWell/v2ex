@@ -9,32 +9,22 @@ import (
 
 func RenderIndex(context *gin.Context) {
 
-	// 查询最后更新事件
+	// 查询最后制表时间
 	lastDrawTime, err := models.FindSystemConfig(models.SystemConfigKeyLastDrawTime)
 	if err != nil {
 		core.Logger.Warnf("[RenderIndex] query last draw time error: %v", err)
 	}
 
-	// 统计当前有效会员数与无效会员数量
-	var normalCount, notFoundCount int
-	status, err := models.CountMemberStatus()
+	// 使用最后会员数据作为数量以及统计截止时间
+	member, err := models.FindLastMember()
 	if err != nil {
-		core.Logger.Warnf("[RenderIndex] count member status error: %v", err)
-	}
-	for _, kv := range status {
-		switch kv.KeyOne {
-		case models.MemberStatusFound:
-			normalCount = kv.Count
-		case models.MemberStatusNotFound:
-			notFoundCount = kv.Count
-		}
+		core.Logger.Warnf("[RenderIndex] query last member error: %v", err)
 	}
 
 	// 设置到页面
 	var pageMap = map[string]any{
-		"normalCount":   normalCount,
-		"notFoundCount": notFoundCount,
-		"totalCount":    normalCount + notFoundCount,
+		"totalCount":    member.Number,
+		"lastCrawlTime": member.CreateTime.Format(core.DefaultDayFormat),
 		"lastDrawTime":  lastDrawTime,
 	}
 	context.HTML(http.StatusOK, "index.html", pageMap)

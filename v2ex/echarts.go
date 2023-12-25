@@ -41,7 +41,7 @@ func DrawMemberCountBar() {
 }
 
 func _drawMemberCountBar() *charts.Bar {
-	kvList, err := models.CountMember()
+	kvList, err := models.StatisticsMember()
 	if err != nil {
 		core.Logger.Error(err)
 	}

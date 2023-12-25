@@ -22,7 +22,7 @@ func ReadProxyTransportFromConfig() *http.Transport {
 		return nil
 	}
 
-	core.Logger.Infof("config Http.Proxy[%s] check pass ", proxy)
+	core.Logger.Debugf("config Http.Proxy[%s] check pass ", proxy)
 	return &http.Transport{
 		Proxy:                 http.ProxyURL(proxyURL),
 		MaxIdleConnsPerHost:   10,
