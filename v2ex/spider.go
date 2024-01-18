@@ -1,9 +1,11 @@
 package v2ex
 
 import (
+	"fmt"
 	"liewell.fun/v2ex/core"
 	"liewell.fun/v2ex/models"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -117,4 +119,92 @@ func insertMember(rm *Member, fakeNumber int) (*models.Member, error) {
 
 func StartTopicSpider() {
 
+}
+
+func StartAvatarSpider() {
+	startTime := time.Now()
+	core.Logger.Infof("[StartAvatarSpider] start at [%s]", startTime.Format(core.DefaultTimeFormat))
+
+	// 保存头像根目录
+	directory := core.GlobalConfig.V2ex.AvatarDir
+
+	// 使用三个线程抓取
+	step := 200000 // 每个线程抓取数量
+	var wg sync.WaitGroup
+	wg.Add(3)
+	for i := 0; i < 3; i++ {
+		go func(p int) {
+			defer wg.Done()
+
+			// 确定各自负责的 number 范围
+			s := p * step
+			start := s + 1
+			end := s + step
+			memberList, err := models.FindCustomerAvatarMember(start, end)
+			if err != nil {
+				core.Logger.Errorf("[StartAvatarSpider] query member avatar address scope[%d:%d] error: %s", start, end, err)
+				return
+			}
+
+			// 遍历结果抓取头像并保存
+			for _, kv := range memberList {
+				name := kv.StringOne
+				imageURL := kv.StringTwo
+				filename := fmt.Sprintf("%s.png", name)
+				err := GetImageAndSave(imageURL, filename, directory)
+				if err != nil {
+					core.Logger.Errorf("[StartAvatarSpider] query member[%s] avatar error: %s", name, err)
+					// 如果出错了,就记录到数据库充后续重试
+					saveAvatar(kv.StringOne, imageURL)
+					continue
+				}
+				core.Logger.Infof("[StartAvatarSpider] query member[%s] avatar success!", name)
+			}
+		}(i)
+	}
+	wg.Wait()
+	core.Logger.Infof("[StartAvatarSpider] end cost: %vs", time.Now().Sub(startTime).Seconds())
+}
+
+func CheckMissingAvatarSpider() {
+
+	startTime := time.Now()
+	core.Logger.Infof("[CheckMissingAvatarSpider] start at [%s]", startTime.Format(core.DefaultTimeFormat))
+
+	// 保存头像根目录
+	directory := core.GlobalConfig.V2ex.AvatarDir
+
+	avatars, err := models.FindAllAvatar()
+	if err != nil {
+		core.Logger.Errorf("[CheckMissingAvatarSpider] query from db error: %s", err)
+		return
+	}
+
+	for _, avatar := range avatars {
+		id := avatar.Id
+		name := avatar.Name
+		imageURL := avatar.Avatar
+		filename := fmt.Sprintf("%s.png", name)
+		err := GetImageAndSave(imageURL, filename, directory)
+		if err != nil {
+			// 如果出错了,不从表中删除
+			core.Logger.Errorf("[CheckMissingAvatarSpider] query member[%s] avatar error: %s", name, err)
+			continue
+		}
+		// 成功保存了头像,从表中删除,后续不会再次查询
+		_ = models.DeleteAvatar(id)
+		core.Logger.Infof("[CheckMissingAvatarSpider] query member[%s] avatar success!", name)
+	}
+	core.Logger.Infof("[CheckMissingAvatarSpider] end cost: %vs", time.Now().Sub(startTime).Seconds())
+}
+
+func saveAvatar(name, imageURL string) {
+	avatar := &models.Avatar{
+		Name:   name,
+		Avatar: imageURL,
+	}
+	_, err := models.SaveAvatar(avatar)
+	if err != nil {
+		core.Logger.Errorf("[StartAvatarSpider] save member[%s] to table avatar error: %s", name, err)
+	}
 }

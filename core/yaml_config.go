@@ -41,6 +41,7 @@ type YamlZap struct {
 }
 
 type YamlV2ex struct {
+	AvatarDir   string `yaml:"avatarDir"`
 	Token       string `yaml:"token"`
 	StartSpider bool   `yaml:"startSpider"`
 }

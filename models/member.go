@@ -90,3 +90,15 @@ func StatisticsMemberTrend() ([]KV, error) {
 	err := core.MYSQL.Raw(rawSQL).Scan(&results).Error
 	return results, err
 }
+
+// FindCustomerAvatarMember 从数据库获取需要抓取头像地址
+// 观察发现 avatar 字段分为两类：gravatar 开头 和 avatar 开头
+// gravatar 大部分都是系统自动生成的头像,过滤掉
+func FindCustomerAvatarMember(start, end int) ([]KV, error) {
+	var results []KV
+	err := core.MYSQL.Model(EmptyMember).
+		Select("name as string_one, avatar as string_two").
+		Where("avatar not like '%gravatar%' and avatar != '' and number between ? and ?", start, end).
+		Scan(&results).Error
+	return results, err
+}

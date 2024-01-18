@@ -28,5 +28,15 @@ CREATE TABLE `system_config`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
+create table `avatar`
+(
+    `id`     int NOT NULL AUTO_INCREMENT,
+    `name`   varchar(255)  DEFAULT NULL,
+    `avatar` varchar(2048) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
 INSERT INTO `system_config` (`id`, `key`, `value`)
 VALUES (1, 'last_draw_time', '0001-01-01 00:00:00');

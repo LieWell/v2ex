@@ -8,7 +8,7 @@ http:
   listenAddrTLS:
   certFile:
   keyFile:
-  proxy: 
+  proxy:
 mysql:
   host: 127.0.0.1
   port: 3306
@@ -18,5 +18,6 @@ mysql:
   maxOpenConnections: 100
   maxIdleConnections: 10
 v2ex:
+  avatarDir: "../tmp/"
   startSpider: false
   token:
