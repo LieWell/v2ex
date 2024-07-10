@@ -30,4 +30,5 @@ Thumbs.db
 *.iml
 /out/*
 *.log
-.tmp/
+./tmp/
+.vscode/

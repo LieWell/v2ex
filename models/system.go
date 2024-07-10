@@ -9,6 +9,7 @@ var (
 
 var (
 	SystemConfigKeyLastDrawTime = "last_draw_time"
+	SystemConfigKeyLastAvatarId = "last_avatar_id"
 )
 
 type SystemConfig struct {

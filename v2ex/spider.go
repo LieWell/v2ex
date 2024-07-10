@@ -2,11 +2,12 @@ package v2ex
 
 import (
 	"fmt"
-	"liewell.fun/v2ex/core"
-	"liewell.fun/v2ex/models"
 	"net/http"
 	"sync"
 	"time"
+
+	"liewell.fun/v2ex/core"
+	"liewell.fun/v2ex/models"
 )
 
 var (
@@ -121,15 +122,20 @@ func StartTopicSpider() {
 
 }
 
+/**
+ * 头像存在 CDN 上,没有速率限制,因此可以持续运行
+ */
 func StartAvatarSpider() {
 	startTime := time.Now()
 	core.Logger.Infof("[StartAvatarSpider] start at [%s]", startTime.Format(core.DefaultTimeFormat))
+
+	// TODO 从数据库查询已经扫描到哪个id
 
 	// 保存头像根目录
 	directory := core.GlobalConfig.V2ex.AvatarDir
 
 	// 使用三个线程抓取
-	step := 200000 // 每个线程抓取数量
+	step := 200 // 每个线程抓取数量
 	var wg sync.WaitGroup
 	wg.Add(3)
 	for i := 0; i < 3; i++ {

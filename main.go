@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"flag"
-	"liewell.fun/v2ex/core"
-	"liewell.fun/v2ex/v2ex"
-	"liewell.fun/v2ex/web"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"liewell.fun/v2ex/core"
+	"liewell.fun/v2ex/v2ex"
+	"liewell.fun/v2ex/web"
 )
 
 func main() {
@@ -18,7 +19,7 @@ func main() {
 	go WaitTerm(cancel)
 
 	// 读取配置文件并解析
-	c := flag.String("c", "config.yaml", "config file(default: config.yaml)")
+	c := flag.String("c", "config.yaml", "config file(default: confiÂg.yaml)")
 	flag.Parse()
 	core.LoadYamlConfig(*c)
 
@@ -38,13 +39,14 @@ func main() {
 
 	// 启动分析任务
 	go v2ex.StartDrawCharts()
+	go v2ex.StartAvatarSpider()
 
 	// 启动 web 服务
 	web.StartAndWait(ctx)
 }
 
 func WaitTerm(cancel context.CancelFunc) {
-	quit := make(chan os.Signal)
+	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	defer signal.Stop(quit)
 	<-quit
