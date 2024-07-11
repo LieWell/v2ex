@@ -2,6 +2,7 @@ package web
 
 import (
 	"context"
+
 	"github.com/gin-gonic/gin"
 	"liewell.fun/v2ex/core"
 )
@@ -66,6 +67,9 @@ func registryHandler(engine *gin.Engine) {
 
 	// 会员地域分布
 	engine.GET("/members/location", RenderMembersLocation)
+
+	// 头像马赛克
+	engine.GET("/members/mosaic", RenderMembersMosaic)
 
 	// API 分组
 	api := engine.Group("/api")

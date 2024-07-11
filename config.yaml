@@ -1,6 +1,6 @@
 zap:
   level: debug
-  file: /tmp/v2ex.log
+  file: v2ex.log
   maxSize: 10
   maxAge: 7
 http:
@@ -18,6 +18,6 @@ mysql:
   maxOpenConnections: 100
   maxIdleConnections: 10
 v2ex:
-  avatarDir: "./tmp/"
+  avatarDir: "tmp"
   startSpider: false
   token:

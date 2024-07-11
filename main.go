@@ -19,7 +19,7 @@ func main() {
 	go WaitTerm(cancel)
 
 	// 读取配置文件并解析
-	c := flag.String("c", "config.yaml", "config file(default: confiÂg.yaml)")
+	c := flag.String("c", "config.yaml", "config file(default: config.yaml)")
 	flag.Parse()
 	core.LoadYamlConfig(*c)
 
@@ -37,9 +37,8 @@ func main() {
 		core.Logger.Infof("v2ex spider switch is off!")
 	}
 
-	// 启动分析任务
-	go v2ex.StartDrawCharts()
-	go v2ex.StartAvatarSpider()
+	// 分析任务
+	// go v2ex.StartDrawCharts()
 
 	// 启动 web 服务
 	web.StartAndWait(ctx)

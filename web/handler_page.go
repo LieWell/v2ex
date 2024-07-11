@@ -1,10 +1,11 @@
 package web
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"liewell.fun/v2ex/core"
 	"liewell.fun/v2ex/models"
-	"net/http"
 )
 
 func RenderIndex(context *gin.Context) {
@@ -40,4 +41,8 @@ func RenderMembersTrend(context *gin.Context) {
 
 func RenderMembersLocation(context *gin.Context) {
 	context.HTML(http.StatusOK, "members_location.html", nil)
+}
+
+func RenderMembersMosaic(context *gin.Context) {
+	context.HTML(http.StatusOK, "mosaic.html", nil)
 }
