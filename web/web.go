@@ -71,7 +71,5 @@ func registryHandler(engine *gin.Engine) {
 	// API 分组
 	api := engine.Group("/api")
 	api.GET("/", ListAPIs)
-	// 暂时不暴露 API
-	// api.GET("/members/:pageNo/:pageSize", ListMembers)
-	api.GET("/9d958d9339a8a521e", DrawPic)
+	api.GET("/members/:pageNo/:pageSize", ListMembers)
 }

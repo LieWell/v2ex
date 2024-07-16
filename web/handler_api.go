@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"liewell.fun/v2ex/core"
 	"liewell.fun/v2ex/models"
-	"liewell.fun/v2ex/v2ex"
 )
 
 func ListAPIs(ctx *gin.Context) {
@@ -41,10 +40,4 @@ func ListMembers(context *gin.Context) {
 		TotalCount: int(total),
 	}
 	context.JSON(http.StatusOK, core.NewWithSuccess(response))
-}
-
-func DrawPic(context *gin.Context) {
-	v2ex.DrawMemberCountBar("members_count.html")
-	v2ex.DrawMemberTrendLine("members_trend.html")
-	context.JSON(http.StatusOK, core.SuccessResponse)
 }
