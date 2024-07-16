@@ -1,6 +1,6 @@
 # V2EX
 
-## 一个爬取 `v2ex.com` 数据并展示的项目。
+## 🕷 一个有趣的 `v2ex.com` 爬虫 🕷️
 
 ![stars](https://img.shields.io/github/stars/LieWell/v2ex.svg)
 ![forks](https://img.shields.io/github/forks/LieWell/v2ex.svg)
