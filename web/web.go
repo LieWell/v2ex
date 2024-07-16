@@ -9,7 +9,7 @@ import (
 
 func StartAndWait(ctx context.Context) {
 
-	cfg := core.GlobalConfig.Http
+	cfg := &core.GlobalConfig.Http
 
 	// 服务运行模式
 	if core.GlobalConfig.Zap.Level == "debug" {
@@ -23,7 +23,7 @@ func StartAndWait(ctx context.Context) {
 	r.Use(middleLogger(nil), middleWareCORS(), middleWareRecovery())
 
 	// 注册路由
-	registryHandler(r)
+	registryHandler(r, cfg)
 
 	// 启动服务
 	if len(cfg.ListenAddrTLS) > 0 {
@@ -48,7 +48,7 @@ func StartAndWait(ctx context.Context) {
 	}
 }
 
-func registryHandler(engine *gin.Engine) {
+func registryHandler(engine *gin.Engine, cfg *core.YamlHttp) {
 
 	// 设定静态资源目录
 	engine.Static("/static", "static")
@@ -59,17 +59,22 @@ func registryHandler(engine *gin.Engine) {
 	// 渲染首页
 	engine.GET("/", RenderIndex)
 
-	// 会员数量
+	// 会员数量统计
 	engine.GET("/members/count", RenderMembersCount)
 
-	// 会员趋势
+	// 会员增长趋势统计
 	engine.GET("/members/trend", RenderMembersTrend)
+
+	// 地域词云
+	engine.GET("/members/cloud", RenderMembersCloud)
 
 	// 头像马赛克
 	engine.GET("/members/mosaic", RenderMembersMosaic)
 
 	// API 分组
-	api := engine.Group("/api")
-	api.GET("/", ListAPIs)
-	api.GET("/members/:pageNo/:pageSize", ListMembers)
+	if cfg.ExposeAPI {
+		api := engine.Group("/api")
+		api.GET("/", ListAPIs)
+		api.GET("/members/:pageNo/:pageSize", ListMembers)
+	}
 }

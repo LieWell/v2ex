@@ -1,9 +1,10 @@
 package core
 
 import (
-	"gopkg.in/yaml.v3"
 	"log"
 	"os"
+
+	"gopkg.in/yaml.v3"
 )
 
 var GlobalConfig YamlConfig
@@ -21,6 +22,7 @@ type YamlHttp struct {
 	CertFile      string `yaml:"certFile"`      // TLS 证书
 	KeyFile       string `yaml:"keyFile"`       // TLS 密钥
 	Proxy         string `yaml:"proxy"`         // 代理地址
+	ExposeAPI     bool   `yaml:"exposeAPI"`     // 是否暴露 API 服务
 }
 
 type YamlMysql struct {

@@ -42,3 +42,7 @@ func RenderMembersTrend(context *gin.Context) {
 func RenderMembersMosaic(context *gin.Context) {
 	context.HTML(http.StatusOK, "mosaic.html", nil)
 }
+
+func RenderMembersCloud(context *gin.Context) {
+	context.HTML(http.StatusOK, "members_cloud.html", nil)
+}

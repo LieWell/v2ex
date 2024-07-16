@@ -9,6 +9,7 @@ http:
   certFile:
   keyFile:
   proxy: http://127.0.0.1:1082
+  exposeAPI: false
 mysql:
   host: 127.0.0.1
   port: 3306
