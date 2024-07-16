@@ -38,7 +38,7 @@ func main() {
 	}
 
 	// 分析任务
-	// go v2ex.StartDrawCharts()
+	go v2ex.StartDrawCharts()
 
 	// 启动 web 服务
 	web.StartAndWait(ctx)

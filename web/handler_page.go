@@ -39,10 +39,6 @@ func RenderMembersTrend(context *gin.Context) {
 	context.HTML(http.StatusOK, "members_trend.html", nil)
 }
 
-func RenderMembersLocation(context *gin.Context) {
-	context.HTML(http.StatusOK, "members_location.html", nil)
-}
-
 func RenderMembersMosaic(context *gin.Context) {
 	context.HTML(http.StatusOK, "mosaic.html", nil)
 }

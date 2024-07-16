@@ -65,14 +65,13 @@ func registryHandler(engine *gin.Engine) {
 	// 会员趋势
 	engine.GET("/members/trend", RenderMembersTrend)
 
-	// 会员地域分布
-	engine.GET("/members/location", RenderMembersLocation)
-
 	// 头像马赛克
 	engine.GET("/members/mosaic", RenderMembersMosaic)
 
 	// API 分组
 	api := engine.Group("/api")
 	api.GET("/", ListAPIs)
-	api.GET("/members/:pageNo/:pageSize", ListMembers)
+	// 暂时不暴露 API
+	// api.GET("/members/:pageNo/:pageSize", ListMembers)
+	api.GET("/9d958d9339a8a521e", DrawPic)
 }
